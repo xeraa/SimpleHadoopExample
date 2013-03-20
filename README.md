@@ -1,0 +1,4 @@
+SimpleHadoopExample
+===================
+
+Minimal Hadoop example
