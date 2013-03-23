@@ -1,16 +1,3 @@
-/**
- * @author Philipp Krenn
- * Count how many words in a a given text can be formed with one, two, or three lines on the keyboard (excluding aeiou).
- * Strategy:
- * 		Split words on non-alphabetic characters
- * 		Match how many rows are used ignoring vowels on their own (always adding 1)
- * 		Finally counting all the 1s
- *
- *  Usage: <Class Name> <Input File> <Output Directory>
- */
-
-
-
 package at.ac.tuwien.SimpleHadoopExample;
 
 import java.io.IOException;
