@@ -77,13 +77,14 @@ public class CountWords {
 	private static final String OUTPUT_FOLDER = "target/result/";
 
 	public static void main(String[] args) throws Exception {
-		Configuration conf = new Configuration();
-		Job job = new Job(conf, "word count");
 
-		// Remove any
+		// Remove any generated files from the previous run, otherwise the job will fail
 		FileSystem fileSystem = FileSystem.get(new Configuration());
 		fileSystem.delete(new Path(OUTPUT_FOLDER), true);
 
+		// Set the current job up and execute it
+		Configuration configuration = new Configuration();
+		Job job = new Job(configuration, "Job: Word Count");
 		job.setJarByClass(CountWords.class);
 		job.setMapperClass(TokenizerMapper.class);
 		job.setCombinerClass(IntSumReducer.class);

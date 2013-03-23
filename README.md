@@ -16,6 +16,8 @@ Minimal Hadoop example project with Apache Hadoop Core.
 
     mvn clean test
 
+Or you can simply run the main method in your preferred IDE.
+
 The result will be in the file *target/result/part-r-00000*.
 
 
