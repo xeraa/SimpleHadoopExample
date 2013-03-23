@@ -71,15 +71,12 @@ public class CountWords {
 		}
 	}
 
-
+	// The input file and output folder
+	private static final String INPUT_FILE = "src/main/resources/2600.txt";
+	private static final String OUTPUT_FOLDER = "target/result/";
 
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
-		String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
-		if (otherArgs.length != 2) {
-			System.err.println("Usage: wordcount <in> <out>");
-			System.exit(2);
-		}
 		Job job = new Job(conf, "word count");
 		job.setJarByClass(CountWords.class);
 		job.setMapperClass(TokenizerMapper.class);
@@ -87,8 +84,8 @@ public class CountWords {
 		job.setReducerClass(IntSumReducer.class);
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(IntWritable.class);
-		FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
-		FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]));
+		FileInputFormat.addInputPath(job, new Path(INPUT_FILE));
+		FileOutputFormat.setOutputPath(job, new Path(OUTPUT_FOLDER));
 		System.exit(job.waitForCompletion(true) ? 0 : 1);
 	}
 }
