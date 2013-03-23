@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
@@ -78,6 +79,11 @@ public class CountWords {
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
 		Job job = new Job(conf, "word count");
+
+		// Remove any
+		FileSystem fileSystem = FileSystem.get(new Configuration());
+		fileSystem.delete(new Path(OUTPUT_FOLDER), true);
+
 		job.setJarByClass(CountWords.class);
 		job.setMapperClass(TokenizerMapper.class);
 		job.setCombinerClass(IntSumReducer.class);
