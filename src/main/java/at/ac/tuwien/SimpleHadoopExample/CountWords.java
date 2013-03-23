@@ -1,7 +1,6 @@
 package at.ac.tuwien.SimpleHadoopExample;
 
 import java.io.IOException;
-import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
 import org.apache.hadoop.conf.Configuration;
@@ -32,16 +31,16 @@ public class CountWords {
 			Pattern patternSingle = Pattern.compile("^([aeiouqwrtzp]+)|([aeiouyxcvbnm]+)|([aeiousdfghjkl]+)$", Pattern.CASE_INSENSITIVE);
 			Pattern patternDouble = Pattern.compile("^([aeiouqwrtzupsdfghjkl]+)|([aeiouqwrtzpyxcvbnm]+)|([aeiousdfghjklyxcvbnm]+)$", Pattern.CASE_INSENSITIVE);
 			Pattern patternAll = Pattern.compile("^([abcdefghijklmnopqrstuvwxyz]+)$", Pattern.CASE_INSENSITIVE);
+			String[] words = value.toString().split("\\P{Alpha}+");
 			Pattern patternVowels = Pattern.compile("^([aeiou]+)$", Pattern.CASE_INSENSITIVE);
-			while(itr.hasMoreTokens()){
-				String token = itr.nextToken();
 				//System.out.println(token);
-				if(!patternVowels.matcher(token).matches()){
-					if(patternSingle.matcher(token).matches()){
+			for (String word : words) {
+				if (!patternVowels.matcher(word).matches()) {
+					if (patternSingle.matcher(word).matches()) {
 						context.write(new Text("1"), ONE);
-					} else if(patternDouble.matcher(token).matches()){
+					} else if (patternDouble.matcher(word).matches()) {
 						context.write(new Text("2"), ONE);
-					} else if(patternAll.matcher(token).matches()){
+					} else if (patternTripple.matcher(word).matches()) {
 						context.write(new Text("3"), ONE);
 					}
 				}
