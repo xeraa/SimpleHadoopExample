@@ -13,27 +13,30 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-import org.apache.hadoop.util.GenericOptionsParser;
-
 
 public class CountWords {
 
+	public static class TokenizerMapper extends Mapper<Object, Text, Text, IntWritable> {
 
 		private static final Logger LOG = Logger.getLogger(TokenizerMapper.class.getName());
 
-	public static class TokenizerMapper extends Mapper<Object, Text, Text, IntWritable>{
-
-		private final static IntWritable ONE = new IntWritable(1);
-
-
+		// Hadoop specific value for the MapReduce communication
+		private static final IntWritable ONE = new IntWritable(1);
 
 		@Override
-		public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
-			StringTokenizer itr = new StringTokenizer(value.toString(), " .,:;?!\"-*+#'/()=[]$%&�^�{}\\@|~_<>");
-			Pattern patternSingle = Pattern.compile("^([aeiouqwrtzp]+)|([aeiouyxcvbnm]+)|([aeiousdfghjkl]+)$", Pattern.CASE_INSENSITIVE);
-			Pattern patternDouble = Pattern.compile("^([aeiouqwrtzupsdfghjkl]+)|([aeiouqwrtzpyxcvbnm]+)|([aeiousdfghjklyxcvbnm]+)$", Pattern.CASE_INSENSITIVE);
-			Pattern patternAll = Pattern.compile("^([abcdefghijklmnopqrstuvwxyz]+)$", Pattern.CASE_INSENSITIVE);
+		public void map(Object key, Text value, Context context) throws IOException,
+				InterruptedException {
 			String[] words = value.toString().split("\\P{Alpha}+");
+
+			Pattern patternSingle = Pattern.compile(
+					"^([aeiouqwrtzp]+)|([aeiouyxcvbnm]+)|([aeiousdfghjkl]+)$",
+					Pattern.CASE_INSENSITIVE);
+			Pattern patternDouble = Pattern
+					.compile(
+							"^([aeiouqwrtzupsdfghjkl]+)|([aeiouqwrtzpyxcvbnm]+)|([aeiousdfghjklyxcvbnm]+)$",
+							Pattern.CASE_INSENSITIVE);
+			Pattern patternTripple = Pattern.compile("^([abcdefghijklmnopqrstuvwxyz]+)$",
+					Pattern.CASE_INSENSITIVE);
 			Pattern patternVowels = Pattern.compile("^([aeiou]+)$", Pattern.CASE_INSENSITIVE);
 
 			for (String word : words) {
@@ -53,16 +56,15 @@ public class CountWords {
 		}
 	}
 
-
-
-	public static class IntSumReducer extends Reducer<Text,IntWritable,Text,IntWritable> {
+	public static class IntSumReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
 		private final IntWritable result = new IntWritable();
 
 		@Override
-		public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
+		public void reduce(Text key, Iterable<IntWritable> values, Context context)
+				throws IOException, InterruptedException {
 			int sum = 0;
-			for (IntWritable val : values) {
-				sum += val.get();
+			for (IntWritable value : values) {
+				sum += value.get();
 			}
 			result.set(sum);
 			context.write(key, result);
