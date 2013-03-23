@@ -1,6 +1,7 @@
 package at.ac.tuwien.SimpleHadoopExample;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import org.apache.hadoop.conf.Configuration;
@@ -18,6 +19,7 @@ import org.apache.hadoop.util.GenericOptionsParser;
 public class CountWords {
 
 
+		private static final Logger LOG = Logger.getLogger(TokenizerMapper.class.getName());
 
 	public static class TokenizerMapper extends Mapper<Object, Text, Text, IntWritable>{
 
@@ -33,15 +35,18 @@ public class CountWords {
 			Pattern patternAll = Pattern.compile("^([abcdefghijklmnopqrstuvwxyz]+)$", Pattern.CASE_INSENSITIVE);
 			String[] words = value.toString().split("\\P{Alpha}+");
 			Pattern patternVowels = Pattern.compile("^([aeiou]+)$", Pattern.CASE_INSENSITIVE);
-				//System.out.println(token);
+
 			for (String word : words) {
 				if (!patternVowels.matcher(word).matches()) {
 					if (patternSingle.matcher(word).matches()) {
 						context.write(new Text("1"), ONE);
+						LOG.fine("One row: " + word);
 					} else if (patternDouble.matcher(word).matches()) {
 						context.write(new Text("2"), ONE);
+						LOG.fine("Two rows: " + word);
 					} else if (patternTripple.matcher(word).matches()) {
 						context.write(new Text("3"), ONE);
+						LOG.fine("Three rows: " + word);
 					}
 				}
 			}
