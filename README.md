@@ -1,5 +1,7 @@
 # Simple Hadoop Example
 
+[![Build Status](https://travis-ci.org/xeraa/SimpleHadoopExample.png?branch=master)](https://travis-ci.org/xeraa/SimpleHadoopExample)
+
 
 Minimal Hadoop example project with Apache Hadoop Core.
 
