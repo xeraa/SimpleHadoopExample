@@ -8,7 +8,7 @@ Minimal Hadoop example project with Apache Hadoop Core.
 ## Requirements
 
 * Maven 2 or 3
-* JDK 6 or 7
+* JDK 7+
 * *nix operating system because auf [HADOOP-7682](https://issues.apache.org/jira/browse/HADOOP-7682)
 
 
